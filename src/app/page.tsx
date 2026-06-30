@@ -23,7 +23,7 @@ export default function Home() {
 
         {/* 2 · THE NOTIFICATION */}
         <Scene {...scenes.notification}>
-          <Caption>&hellip;until one message changed everything.</Caption>
+          <Caption>until&hellip;</Caption>
         </Scene>
 
         {/* 3 · THE REACTION */}
