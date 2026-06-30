@@ -42,7 +42,8 @@ export default function Home() {
 
         {/* 6 · THE WALK TO THE HOUSE (image pending) */}
         <Scene {...scenes.walk}>
-          <Caption>You are invited.</Caption>
+          <Eyebrow>You&rsquo;re warmly invited</Eyebrow>
+          <Caption>Come walk with us, all the way home. 💛</Caption>
         </Scene>
 
         {/* 7 · THE KERALA HOUSE — the names */}
@@ -78,12 +79,16 @@ export default function Home() {
 
         {/* 12 · THE CLOSING (image pending) */}
         <Scene {...scenes.closing}>
-          <Eyebrow>With love &amp; blessings</Eyebrow>
+          <Eyebrow>Together with our families</Eyebrow>
           <Heading>
             {w.groom} &amp; {w.bride}
           </Heading>
           <Divider mark="✦ ✦ ✦" />
-          <Caption>Join us as we begin forever 💛</Caption>
+          <Caption>
+            We&rsquo;d be honoured to have you share in our joy as two hearts
+            become one.
+          </Caption>
+          <Meta>Your presence and blessings are the only gift we seek 💛</Meta>
         </Scene>
       </Film>
     </main>

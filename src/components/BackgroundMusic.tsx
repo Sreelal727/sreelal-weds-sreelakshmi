@@ -3,7 +3,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./BackgroundMusic.module.css";
 
-/** Drop your track here: /public/audio/wedding-theme.mp3 (or change this path). */
+/**
+ * Background score: /public/audio/wedding-theme.mp3
+ * Currently Erik Satie — Gymnopédie No. 1 (recording: CC0 / public domain,
+ * via Wikimedia Commons). Swap the file to change the track.
+ */
 const TRACK = "/audio/wedding-theme.mp3";
 const TARGET_VOLUME = 0.38;
 const FADE_IN_MS = 2400;

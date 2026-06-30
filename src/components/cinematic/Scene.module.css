@@ -66,8 +66,10 @@
   object-fit: cover;
 }
 @media (orientation: portrait) {
+  /* Full image, scaled up a touch so it fills more of a tall phone screen
+     (slight side crop is fine — keeps the subject prominent). */
   .plateResponsive {
-    transform: none !important;
+    transform: scale(1.22) !important;
   }
   .plateResponsive .plateImg {
     object-fit: contain;

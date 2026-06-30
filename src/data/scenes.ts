@@ -130,5 +130,5 @@ export const wedding = {
   malayalamDate: "കൊല്ലവർഷം 1202 · ചിങ്ങം 14",
   star: "ഉത്രട്ടാതി നക്ഷത്രം",
   muhurtham: "Muhurtham · 10:30 – 11:25 AM",
-  venue: "Bride's Home · Payyoli",
+  venue: "Bride's Residency · Payyoli",
 };
