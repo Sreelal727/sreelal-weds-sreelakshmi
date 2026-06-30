@@ -123,3 +123,36 @@
   letter-spacing: 0.2em;
   opacity: 0.95;
 }
+
+/* Glassy pill link to the venue map. */
+.mapButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 0.6rem;
+  padding: 0.7rem 1.5rem;
+  border-radius: 999px;
+  border: 1px solid oklch(82% 0.12 85 / 0.5);
+  background: oklch(20% 0.03 50 / 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--gold-bright);
+  font-family: var(--font-serif), serif;
+  font-weight: 600;
+  font-size: var(--text-body);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-shadow: 0 1px 12px oklch(12% 0.02 45 / 0.6);
+  transition:
+    transform var(--dur-fast) var(--ease-out-expo),
+    background var(--dur-fast) var(--ease-out-expo),
+    border-color var(--dur-fast) var(--ease-out-expo);
+}
+.mapButton:hover {
+  transform: translateY(-2px);
+  background: oklch(28% 0.05 50 / 0.55);
+  border-color: oklch(86% 0.13 88 / 0.8);
+}
+.mapPin {
+  flex: none;
+}

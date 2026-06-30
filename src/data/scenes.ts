@@ -131,4 +131,5 @@ export const wedding = {
   star: "ഉത്രട്ടാതി നക്ഷത്രം",
   muhurtham: "Muhurtham · 10:30 – 11:25 AM",
   venue: "Bride's Residency · Payyoli",
+  mapUrl: "https://maps.app.goo.gl/qMHx2iMJY3dSUFgj9?g_st=aw",
 };

@@ -89,6 +89,25 @@ export default function BackgroundMusic() {
     return remove;
   }, [play]);
 
+  // Pause when the tab/app is backgrounded; resume on return (if still enabled).
+  useEffect(() => {
+    const onVisibility = () => {
+      const audio = audioRef.current;
+      if (!audio) return;
+      if (document.hidden) {
+        audio.pause();
+      } else if (enabledRef.current && startedRef.current) {
+        audio.play().catch(() => {});
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("pagehide", onVisibility);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("pagehide", onVisibility);
+    };
+  }, []);
+
   const toggle = () => {
     if (enabled) {
       enabledRef.current = false;

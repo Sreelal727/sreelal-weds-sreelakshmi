@@ -8,6 +8,7 @@ import {
   Meta,
   Weds,
   Divider,
+  MapButton,
 } from "@/components/cinematic/Type";
 import { scenes, wedding as w } from "@/data/scenes";
 
@@ -88,6 +89,7 @@ export default function Home() {
             We&rsquo;d be honoured to have you share in our joy as two hearts
             become one. 💛
           </Caption>
+          <MapButton href={w.mapUrl} />
         </Scene>
       </Film>
     </main>
