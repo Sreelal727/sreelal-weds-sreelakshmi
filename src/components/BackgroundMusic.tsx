@@ -3,25 +3,24 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./BackgroundMusic.module.css";
 
-/**
- * Background score: /public/audio/wedding-theme.mp3
- * Currently Erik Satie — Gymnopédie No. 1 (recording: CC0 / public domain,
- * via Wikimedia Commons). Swap the file to change the track.
- */
+/** Background score: /public/audio/wedding-theme.mp3 (swap the file to change). */
 const TRACK = "/audio/wedding-theme.mp3";
-const TARGET_VOLUME = 0.38;
-const FADE_IN_MS = 2400;
+const TARGET_VOLUME = 0.5;
+const FADE_IN_MS = 2200;
 const FADE_OUT_MS = 600;
 
 /**
- * Ambient background score. Browsers block autoplay-with-sound, so the track
- * fades in on the viewer's first interaction (scroll/tap/key) and a small
- * glassy control lets them mute/unmute. Renders nothing if the file is absent.
+ * Ambient background score — ON by default. Browsers block autoplay-with-sound
+ * until the visitor interacts, so we try to start immediately and, if blocked,
+ * start on the very first interaction (scroll / tap / key) — no need to find
+ * the button. The corner control then mutes/unmutes.
  */
 export default function BackgroundMusic() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const rafRef = useRef<number | null>(null);
-  const [playing, setPlaying] = useState(false);
+  const enabledRef = useRef(true);
+  const startedRef = useRef(false);
+  const [enabled, setEnabled] = useState(true);
   const [available, setAvailable] = useState(true);
 
   const fadeTo = useCallback((target: number, ms: number, done?: () => void) => {
@@ -42,41 +41,66 @@ export default function BackgroundMusic() {
     rafRef.current = requestAnimationFrame(step);
   }, []);
 
-  const enable = useCallback(() => {
+  const play = useCallback(() => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio) return Promise.reject(new Error("no audio"));
     audio.volume = 0;
-    audio
-      .play()
-      .then(() => {
-        setPlaying(true);
-        fadeTo(TARGET_VOLUME, FADE_IN_MS);
-      })
-      .catch(() => {
-        /* autoplay blocked or file missing — control stays available to retry */
-      });
+    return audio.play().then(() => {
+      startedRef.current = true;
+      fadeTo(TARGET_VOLUME, FADE_IN_MS);
+    });
   }, [fadeTo]);
 
-  const disable = useCallback(() => {
-    setPlaying(false);
+  const stop = useCallback(() => {
     fadeTo(0, FADE_OUT_MS, () => audioRef.current?.pause());
   }, [fadeTo]);
 
-  // Start on the first user gesture (required by autoplay policy).
+  // Start as early as allowed: immediately, else on the first interaction.
   useEffect(() => {
-    const events = ["pointerdown", "keydown", "wheel", "touchstart", "scroll"];
-    let started = false;
-    const startOnce = () => {
-      if (started) return;
-      started = true;
-      events.forEach((e) => window.removeEventListener(e, startOnce));
-      enable();
+    const events = [
+      "pointerdown",
+      "touchstart",
+      "click",
+      "keydown",
+      "wheel",
+      "scroll",
+    ];
+    let removed = false;
+    const remove = () => {
+      if (removed) return;
+      removed = true;
+      events.forEach((e) => window.removeEventListener(e, attempt));
     };
+    const attempt = () => {
+      if (!enabledRef.current || startedRef.current) {
+        remove();
+        return;
+      }
+      play()
+        .then(remove)
+        .catch(() => {
+          /* still blocked — wait for the next interaction */
+        });
+    };
+    attempt(); // best-effort immediate autoplay
     events.forEach((e) =>
-      window.addEventListener(e, startOnce, { passive: true }),
+      window.addEventListener(e, attempt, { passive: true }),
     );
-    return () => events.forEach((e) => window.removeEventListener(e, startOnce));
-  }, [enable]);
+    return remove;
+  }, [play]);
+
+  const toggle = () => {
+    if (enabled) {
+      enabledRef.current = false;
+      setEnabled(false);
+      stop();
+    } else {
+      enabledRef.current = true;
+      startedRef.current = false;
+      setEnabled(true);
+      play().catch(() => {});
+    }
+  };
 
   if (!available) return null;
 
@@ -92,10 +116,10 @@ export default function BackgroundMusic() {
       <button
         type="button"
         className={styles.toggle}
-        data-on={playing}
-        onClick={() => (playing ? disable() : enable())}
-        aria-label={playing ? "Mute music" : "Play music"}
-        aria-pressed={playing}
+        data-on={enabled}
+        onClick={toggle}
+        aria-label={enabled ? "Mute music" : "Play music"}
+        aria-pressed={enabled}
       >
         <span className={styles.bars} aria-hidden>
           <span className={styles.bar} />

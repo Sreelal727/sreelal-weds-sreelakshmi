@@ -86,9 +86,8 @@ export default function Home() {
           <Divider mark="✦ ✦ ✦" />
           <Caption>
             We&rsquo;d be honoured to have you share in our joy as two hearts
-            become one.
+            become one. 💛
           </Caption>
-          <Meta>Your presence and blessings are the only gift we seek 💛</Meta>
         </Scene>
       </Film>
     </main>
