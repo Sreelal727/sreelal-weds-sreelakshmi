@@ -27,9 +27,7 @@ export default function Home() {
         </Scene>
 
         {/* 3 · THE REACTION */}
-        <Scene {...scenes.reaction}>
-          <Caption>She said yes.</Caption>
-        </Scene>
+        <Scene {...scenes.reaction} />
 
         {/* 4 · THE TRAIN TO PAYYOLI (image pending) */}
         <Scene {...scenes.train}>
