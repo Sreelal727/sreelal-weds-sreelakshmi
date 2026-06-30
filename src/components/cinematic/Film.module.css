@@ -1,0 +1,36 @@
+/* The "film": a single sticky screen holding every scene as an absolutely
+   stacked layer. A scroll-driven crossfade dissolves one scene into the next,
+   so exactly one viewport is ever painted — no seams, no overlap. */
+
+.film {
+  position: relative;
+  width: 100%;
+}
+
+.screen {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--ink);
+  isolation: isolate;
+}
+
+/* Reduced-motion / no-JS fallback: scenes flow normally, all visible. */
+.static .screen {
+  position: static;
+  height: auto;
+}
+.static :global([data-scene]) {
+  position: relative !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  min-height: 100vh;
+}
+.static :global([data-bg]) {
+  transform: none !important;
+}
+.static :global([data-content]) {
+  transform: none !important;
+}

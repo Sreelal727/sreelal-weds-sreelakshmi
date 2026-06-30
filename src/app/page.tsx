@@ -1,66 +1,91 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Film from "@/components/cinematic/Film";
+import Scene from "@/components/cinematic/Scene";
+import {
+  Eyebrow,
+  Caption,
+  Script,
+  Heading,
+  Meta,
+  Weds,
+  Divider,
+} from "@/components/cinematic/Type";
+import { scenes, wedding as w } from "@/data/scenes";
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main>
+      <Film unit={1.35}>
+        {/* 1 · THE OFFICE */}
+        <Scene {...scenes.office}>
+          <Caption>It was just an ordinary day&hellip;</Caption>
+        </Scene>
+
+        {/* 2 · THE NOTIFICATION */}
+        <Scene {...scenes.notification}>
+          <Caption>&hellip;until one message changed everything.</Caption>
+        </Scene>
+
+        {/* 3 · THE REACTION */}
+        <Scene {...scenes.reaction}>
+          <Caption>She said yes.</Caption>
+        </Scene>
+
+        {/* 4 · THE TRAIN TO PAYYOLI (image pending) */}
+        <Scene {...scenes.train}>
+          <Caption>And so the journey begins&hellip;</Caption>
+        </Scene>
+
+        {/* 5 · PAYYOLI RAILWAY STATION */}
+        <Scene {...scenes.station}>
+          <Caption>Welcome to Payyoli.</Caption>
+        </Scene>
+
+        {/* 6 · THE WALK TO THE HOUSE (image pending) */}
+        <Scene {...scenes.walk}>
+          <Caption>You are invited.</Caption>
+        </Scene>
+
+        {/* 7 · THE KERALA HOUSE — the names */}
+        <Scene {...scenes.house}>
+          <Eyebrow>With our families&rsquo; blessings</Eyebrow>
+          <Heading>{w.groom}</Heading>
+          <Weds />
+          <Heading>{w.bride}</Heading>
+        </Scene>
+
+        {/* 8 · TRANSITION — aerial decorated venue (visual breath) */}
+        <Scene {...scenes.transition} />
+
+        {/* 9 · THE DECORATED GATE — venue */}
+        <Scene {...scenes.gate}>
+          <Eyebrow>The Celebration</Eyebrow>
+          <Meta>📍 {w.venue}</Meta>
+        </Scene>
+
+        {/* 10 · INSIDE THE PANDAL — the date (Gregorian + Malayalam) */}
+        <Scene {...scenes.pandal}>
+          <Eyebrow>Save the Date</Eyebrow>
+          <Divider mark="✦" />
+          <Heading>{w.date}</Heading>
+          <Script>{w.malayalamDate}</Script>
+          <Meta>{w.muhurtham}</Meta>
+        </Scene>
+
+        {/* 11 · THE SACRED FIRE */}
+        <Scene {...scenes.fire}>
+          <Caption>Two souls. One fire. One forever.</Caption>
+        </Scene>
+
+        {/* 12 · THE CLOSING (image pending) */}
+        <Scene {...scenes.closing}>
+          <Eyebrow>With love &amp; blessings</Eyebrow>
+          <Heading>
+            {w.groom} &amp; {w.bride}
+          </Heading>
+          <Divider mark="✦ ✦ ✦" />
+          <Caption>Join us as we begin forever 💛</Caption>
+        </Scene>
+      </Film>
+    </main>
   );
 }

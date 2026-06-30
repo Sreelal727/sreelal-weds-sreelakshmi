@@ -1,0 +1,139 @@
+/* A single cinematic scene layer, stacked inside <Film>'s screen and
+   crossfaded by scroll. Absolutely positioned to fill the screen.
+   z-order: bg(0) · plate(1) · vignette(2) · scrim(3) · content(4). */
+
+.scene {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  opacity: 0;
+  will-change: opacity;
+}
+
+/* Background plate — oversized past the edges so parallax drift can never
+   pull it off-screen. Holds the gradient placeholder + the <Image>. */
+.bg {
+  position: absolute;
+  inset: -20% -6%;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  will-change: transform;
+}
+
+/* Full-bleed cover image. */
+.img {
+  object-fit: cover;
+}
+
+/* Blurred fill behind a contained detail shot. */
+.imgBlur {
+  object-fit: cover;
+  transform: scale(1.18);
+  filter: blur(26px) brightness(0.74) saturate(1.12);
+}
+
+/* Sharp, fully-visible image (whole art shown, never cropped). */
+.plate {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.imgContain {
+  object-fit: contain;
+}
+
+/* Cinematic vignette — gentle, tuned for soft pastel art. */
+.vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    130% 115% at 50% 46%,
+    transparent 52%,
+    oklch(22% 0.03 50 / 0.28) 88%,
+    oklch(16% 0.03 50 / 0.42) 100%
+  );
+}
+
+/* Legibility scrims behind text. */
+.scrimBottom,
+.scrimCenter,
+.scrimTop {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.scrimBottom {
+  background: linear-gradient(
+    to top,
+    oklch(16% 0.03 45 / 0.82) 0%,
+    oklch(16% 0.03 45 / 0.45) 22%,
+    transparent 52%
+  );
+}
+.scrimTop {
+  background: linear-gradient(
+    to bottom,
+    oklch(16% 0.03 45 / 0.8) 0%,
+    oklch(16% 0.03 45 / 0.42) 22%,
+    transparent 52%
+  );
+}
+.scrimCenter {
+  background: radial-gradient(
+    72% 50% at 50% 50%,
+    oklch(15% 0.03 45 / 0.6) 0%,
+    oklch(15% 0.03 45 / 0.25) 55%,
+    transparent 80%
+  );
+}
+
+.content {
+  position: relative;
+  z-index: 4;
+  width: min(var(--content-max), 100% - var(--gutter) * 2);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.7rem, 0.4rem + 1.3vw, 1.6rem);
+  text-align: center;
+  align-items: center;
+  will-change: transform;
+}
+
+/* Anchored overlays — use grid self-alignment (NOT transform) so the parent
+   <Film>'s per-frame transform on the content can't break centering. */
+.placeBottom {
+  align-self: end;
+  margin-bottom: clamp(4.5rem, 7vh + var(--letterbox), 7.5rem);
+}
+.placeTop {
+  align-self: start;
+  margin-top: clamp(4rem, 6vh + var(--letterbox), 7rem);
+}
+
+.content[data-align="left"] {
+  text-align: left;
+  align-items: flex-start;
+}
+.content[data-align="right"] {
+  text-align: right;
+  align-items: flex-end;
+}
+
+/* On short/landscape phones, tighten the offsets. */
+@media (max-height: 520px) {
+  .placeBottom {
+    margin-bottom: clamp(1.5rem, 4vh, 3rem);
+  }
+  .placeTop {
+    margin-top: clamp(1.5rem, 4vh, 3rem);
+  }
+}

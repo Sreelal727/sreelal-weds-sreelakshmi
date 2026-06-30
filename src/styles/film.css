@@ -1,0 +1,94 @@
+/* ============================================================
+   FILM LAYER — grain, letterbox bars, vignette, scroll cue
+   Global fixed overlays that frame the whole experience as a
+   "motion picture". All purely decorative, pointer-events: none.
+   ============================================================ */
+
+/* Letterbox cinematic bars (top + bottom) */
+.film-letterbox {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: var(--letterbox);
+  background: oklch(8% 0.01 60);
+  z-index: 90;
+  pointer-events: none;
+}
+.film-letterbox--top {
+  top: 0;
+  box-shadow: 0 6px 18px -6px oklch(0% 0 0 / 0.5);
+}
+.film-letterbox--bottom {
+  bottom: 0;
+  box-shadow: 0 -6px 18px -6px oklch(0% 0 0 / 0.5);
+}
+
+/* Animated film grain */
+.film-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  animation: grain-shift 480ms steps(3) infinite;
+}
+@keyframes grain-shift {
+  0% { transform: translate(0, 0); }
+  33% { transform: translate(-3%, 2%); }
+  66% { transform: translate(2%, -3%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Warm color-grade wash over the whole frame */
+.film-grade {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  background:
+    radial-gradient(120% 90% at 50% 20%, oklch(85% 0.12 80 / 0.12), transparent 62%),
+    linear-gradient(180deg, oklch(60% 0.10 60 / 0.04), oklch(20% 0.02 50 / 0.06));
+}
+
+/* Scroll cue */
+.scroll-cue {
+  position: fixed;
+  bottom: calc(var(--letterbox) + 1.4rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--gold);
+  pointer-events: none;
+  transition: opacity var(--dur-normal) var(--ease-out-expo);
+}
+.scroll-cue__label {
+  font-size: 0.62rem;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+.scroll-cue__line {
+  width: 1px;
+  height: 46px;
+  background: linear-gradient(var(--gold), transparent);
+  transform-origin: top;
+  animation: cue-draw 2s var(--ease-in-out-soft) infinite;
+}
+@keyframes cue-draw {
+  0% { transform: scaleY(0); opacity: 0; }
+  40% { transform: scaleY(1); opacity: 1; }
+  100% { transform: scaleY(1) translateY(20px); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film-grain { animation: none; }
+  .scroll-cue__line { animation: none; }
+}
