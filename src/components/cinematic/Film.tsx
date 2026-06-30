@@ -20,6 +20,7 @@ const FADE = 0.34;
 interface Layer {
   el: HTMLElement;
   bg: HTMLElement | null;
+  plate: HTMLElement | null;
   content: HTMLElement | null;
   zoom: number;
   drift: number;
@@ -62,6 +63,7 @@ export default function Film({ unit = 1.35, children }: FilmProps) {
     const layers: Layer[] = sceneEls.map((el) => ({
       el,
       bg: el.querySelector<HTMLElement>("[data-bg]"),
+      plate: el.querySelector<HTMLElement>("[data-plate]"),
       content: el.querySelector<HTMLElement>("[data-content]"),
       zoom: parseFloat(el.dataset.zoom ?? "1.22"),
       // Clamp drift so it can never exceed the background's vertical overscan
@@ -87,7 +89,11 @@ export default function Film({ unit = 1.35, children }: FilmProps) {
         if (L.bg) {
           const scale = lerp(L.zoom, 1.05, lp);
           const ty = lerp(-L.drift, L.drift, lp);
-          L.bg.style.transform = `translate3d(0, ${ty}%, 0) scale(${scale})`;
+          const tf = `translate3d(0, ${ty}%, 0) scale(${scale})`;
+          L.bg.style.transform = tf;
+          // The sharp plate reads this via CSS so portrait phones can opt out
+          // (contain mode) while landscape keeps the Ken Burns.
+          if (L.plate) L.plate.style.setProperty("--kb", tf);
         }
         if (L.content) {
           const cy = lerp(30, -30, lp);

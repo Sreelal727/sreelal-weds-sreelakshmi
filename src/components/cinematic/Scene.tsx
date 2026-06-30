@@ -4,7 +4,7 @@ import styles from "./Scene.module.css";
 type Align = "center" | "left" | "right";
 type Placement = "center" | "bottom" | "top";
 type Scrim = "bottom" | "center" | "top" | "none";
-type Fit = "cover" | "contain";
+type Fit = "cover" | "contain" | "responsive";
 
 const DEFAULT_GRADIENT =
   "linear-gradient(160deg, oklch(72% 0.07 70), oklch(52% 0.09 48))";
@@ -23,8 +23,12 @@ export interface SceneProps {
   placement?: Placement;
   /** Legibility scrim behind the text. */
   scrim?: Scrim;
-  /** "cover" = full-bleed (faces/landscapes). "contain" = whole image shown
-   *  centered over a blurred fill (detail shots where the art must be readable). */
+  /**
+   * "cover": full-bleed (portrait subjects).
+   * "contain": whole image over a blurred fill (detail shots).
+   * "responsive": cover on landscape screens, contain (whole image) on
+   *   portrait phones — best for wide images that would otherwise over-crop.
+   */
   fit?: Fit;
   /** Ken Burns starting zoom. */
   zoom?: number;
@@ -38,8 +42,6 @@ export interface SceneProps {
 /**
  * A cinematic layer: a full-bleed (or contained) image with a Ken Burns plate,
  * a legibility scrim, and a text overlay. Opacity/parallax driven by <Film>.
- * Fully responsive — `focus` keeps cover subjects framed; `contain` guarantees
- * the whole image is visible behind a blurred fill.
  */
 export default function Scene({
   image,
@@ -54,6 +56,8 @@ export default function Scene({
   priority = false,
   children,
 }: SceneProps) {
+  const hasBackdrop = fit === "contain" || fit === "responsive";
+
   const scrimClass =
     scrim === "none"
       ? null
@@ -72,35 +76,49 @@ export default function Scene({
 
   return (
     <div data-scene data-zoom={zoom} data-drift={drift} className={styles.scene}>
-      {/* Ken Burns plate — cover image, or a blurred fill when fit=contain. */}
+      {/* Ken Burns plate — cover image, or a blurred fill when contained. */}
       <div
         data-bg
         className={styles.bg}
         style={{ backgroundImage: gradient ?? DEFAULT_GRADIENT }}
       >
-        {image && (
-          <Image
-            src={image}
-            alt=""
-            fill
-            priority={priority}
-            sizes="100vw"
-            className={fit === "contain" ? styles.imgBlur : styles.img}
-            style={fit === "cover" ? { objectPosition: focus } : undefined}
-          />
-        )}
+        {image &&
+          (hasBackdrop ? (
+            <Image
+              src={image}
+              alt=""
+              fill
+              priority={priority}
+              sizes="100vw"
+              className={styles.imgBlur}
+            />
+          ) : (
+            <Image
+              src={image}
+              alt=""
+              fill
+              priority={priority}
+              sizes="100vw"
+              className={styles.img}
+              style={{ objectPosition: focus }}
+            />
+          ))}
       </div>
 
-      {/* Sharp, fully-visible image for detail shots. */}
-      {image && fit === "contain" && (
-        <div className={styles.plate}>
+      {/* Sharp image laid over the blurred fill. */}
+      {image && hasBackdrop && (
+        <div
+          data-plate
+          className={`${styles.plate} ${fit === "responsive" ? styles.plateResponsive : styles.plateContain}`}
+        >
           <Image
             src={image}
             alt=""
             fill
             priority={priority}
             sizes="100vw"
-            className={styles.imgContain}
+            className={styles.plateImg}
+            style={fit === "responsive" ? { objectPosition: focus } : undefined}
           />
         </div>
       )}

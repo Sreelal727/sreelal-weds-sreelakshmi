@@ -37,15 +37,41 @@
   filter: blur(26px) brightness(0.74) saturate(1.12);
 }
 
-/* Sharp, fully-visible image (whole art shown, never cropped). */
+/* Sharp image laid over the blurred fill. */
 .plate {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
 }
-.imgContain {
+.plateImg {
+  object-fit: cover;
+}
+
+/* Contain: whole image, static, centered (detail shots like the phone). */
+.plateContain {
+  transform: none;
+}
+.plateContain .plateImg {
   object-fit: contain;
+}
+
+/* Responsive: cover + scroll Ken Burns on landscape screens; the FULL image
+   (contain) on portrait phones so nothing important is cropped. */
+.plateResponsive {
+  transform: var(--kb, none);
+  will-change: transform;
+}
+.plateResponsive .plateImg {
+  object-fit: cover;
+}
+@media (orientation: portrait) {
+  .plateResponsive {
+    transform: none !important;
+  }
+  .plateResponsive .plateImg {
+    object-fit: contain;
+  }
 }
 
 /* Cinematic vignette — gentle, tuned for soft pastel art. */

@@ -30,6 +30,22 @@
   outline-offset: 3px;
 }
 
+/* Attention pulse while music is not yet playing, so it's easy to find/tap. */
+.toggle[data-on="false"]::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 1px solid var(--gold-bright);
+  animation: pulse-ring 2.4s var(--ease-out-expo) infinite;
+  pointer-events: none;
+}
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.6; }
+  70% { opacity: 0; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+
 .bars {
   display: flex;
   align-items: center;

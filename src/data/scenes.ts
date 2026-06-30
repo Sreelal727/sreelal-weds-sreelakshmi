@@ -14,7 +14,7 @@ export interface SceneData {
   focus?: string;
   zoom?: number;
   drift?: number;
-  fit?: "cover" | "contain";
+  fit?: "cover" | "contain" | "responsive";
   placement?: "center" | "bottom" | "top";
   scrim?: "bottom" | "center" | "top" | "none";
   priority?: boolean;
@@ -56,6 +56,7 @@ export const scenes: Record<string, SceneData> = {
   station: {
     id: "station",
     image: "/scenes/station.webp",
+    fit: "responsive",
     gradient: "linear-gradient(160deg, oklch(80% 0.07 70), oklch(60% 0.09 50))",
     focus: "center 42%",
     placement: "bottom",
@@ -71,6 +72,7 @@ export const scenes: Record<string, SceneData> = {
   house: {
     id: "house",
     image: "/scenes/house.webp",
+    fit: "responsive",
     gradient: "linear-gradient(160deg, oklch(78% 0.07 68), oklch(58% 0.09 48))",
     focus: "center 45%",
     placement: "bottom",
@@ -79,6 +81,7 @@ export const scenes: Record<string, SceneData> = {
   transition: {
     id: "transition",
     image: "/scenes/transition.webp",
+    fit: "responsive",
     gradient: "linear-gradient(160deg, oklch(78% 0.07 66), oklch(56% 0.09 46))",
     focus: "center 50%",
     placement: "bottom",
@@ -87,6 +90,7 @@ export const scenes: Record<string, SceneData> = {
   gate: {
     id: "gate",
     image: "/scenes/gate.webp",
+    fit: "responsive",
     gradient: "linear-gradient(160deg, oklch(76% 0.08 62), oklch(56% 0.10 44))",
     focus: "center 40%",
     placement: "bottom",
@@ -94,6 +98,7 @@ export const scenes: Record<string, SceneData> = {
   pandal: {
     id: "pandal",
     image: "/scenes/pandal.webp",
+    fit: "responsive",
     gradient: "linear-gradient(160deg, oklch(74% 0.08 60), oklch(54% 0.10 42))",
     focus: "center 45%",
     placement: "bottom",
@@ -101,6 +106,7 @@ export const scenes: Record<string, SceneData> = {
   fire: {
     id: "fire",
     image: "/scenes/fire.webp",
+    fit: "responsive",
     gradient: "linear-gradient(160deg, oklch(60% 0.10 50), oklch(38% 0.10 40))",
     focus: "center 42%",
     placement: "bottom",
